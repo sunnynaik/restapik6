@@ -4,25 +4,40 @@ import Getfetchdata from './scenarios/fetchdata.js'
 import Getputdata from './scenarios/putdata.js'
 import Getdeletedata from './scenarios/deletedata.js'
 import {group ,sleep} from "k6"
+import { vus } from "./env_rest_api.js"
 
 // This is use for html Report 
 
-// import { htmlReport } from "https://raw.githubusercontent.com/benc-uk/k6-reporter/main/dist/bundle.js";
+import { htmlReport } from "https://raw.githubusercontent.com/benc-uk/k6-reporter/main/dist/bundle.js";
 
-// export function handleSummary(data) {
-//     return {
-//       "summary.html": htmlReport(data),
-//     };
-//   }
+export function handleSummary(data) {
+    return {
+      "summary.html": htmlReport(data),
+    };
+  }
 
 export const options = {
-    ext: {
-        loadimpact: {
-          projectID: 3607882,
-          // Test runs with the same name groups test runs together
-          name: "Rest Api Operations"
-        }
-      },
+    vus:vus,
+    // duration:duration,
+    stages: [
+      { duration: "5s", target: 10 },
+      { duration: "5s", target: 10 },
+      { duration: "5s", target: 10 },
+      { duration: "5s", target: 10 },
+    ],
+    thresholds: {
+      http_req_failed: ['rate<0.01'], // http errors should be less than 1%
+      http_req_duration: ['p(95)<400'], // 95% of requests should be below 2000ms
+    },
+    
+      ext: {
+          loadimpact: {
+            projectID: 3626852,
+            // Test runs with the same name groups test runs together
+            name: "Rest Api"
+          }
+        },
+  
 }
 
 export default ()=> {
