@@ -48,5 +48,4 @@ export default function () {
       "delete status is ok ": (r)=> r.status === 200,
     })
   }
-  
 }
